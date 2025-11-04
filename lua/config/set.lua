@@ -1,6 +1,5 @@
 vim.opt.nu = true
 vim.opt.relativenumber = true
-
 vim.opt.tabstop = 2
 vim.opt.softtabstop = 2
 vim.opt.shiftwidth = 2
@@ -19,7 +18,8 @@ vim.opt.termguicolors = true
 vim.opt.scrolloff = 8
 vim.opt.updatetime = 50
 
-vim.opt.guicursor = ""
+--vim.opt.guicursor = ""
+vim.o.guicursor = 'n-v-c-sm-i-ci-ve:block,r-cr-o:hor20,i:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor'
 
 -- timeout leaderkey
 vim.opt.timeoutlen=400
