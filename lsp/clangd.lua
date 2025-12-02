@@ -58,5 +58,6 @@ return {
         vim.lsp.completion.get()
     end)
 
+    vim.lsp.set_log_level("off")
   end,
 }
