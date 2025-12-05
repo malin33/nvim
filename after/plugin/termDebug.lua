@@ -8,11 +8,11 @@ vim.keymap.set( 'n', '<F11>', ':Step<CR>')
 
 -- simple run&debug for single file c++
 vim.keymap.set("n", "<leader><F5>", function()
-  local fileName = vim.fn.expand("%:p")
-  local baseName = vim.fn.expand("%:r")
-  vim.cmd(string.format(":!g++ %s -o %s -g", fileName, baseName))
-
-  vim.cmd(string.format(":Termdebug %s",baseName))
+  local currentFileName = vim.fn.expand("%:p")
+  local compiledFileName = vim.fn.expand("%:r")
+  vim.cmd(string.format(":!g++ %s -o %s -g", currentFileName, compiledFileName))
+  
+  vim.cmd(string.format(":Termdebug %s",compiledFileName))
   vim.cmd(":call TermDebugSendCommand('start')")
   vim.cmd(string.format(":Var"))
   vim.cmd(string.format(":Source"))
