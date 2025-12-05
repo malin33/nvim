@@ -4,18 +4,6 @@ vim.keymap.set( 'n', '<F9>', ':Break<CR>')
 vim.keymap.set( 'n', '<F10>', ':Over<CR>')
 vim.keymap.set( 'n', '<F11>', ':Step<CR>')
 
-
--- Search file in Path
-vim.keymap.set("n", "<leader>ff", function()
-    return ":find **/*"
-end,{expr=true})
-
-local function getSource()
-  print("Source is")
-end
-
--- let g:termdebug_wide=1
-
 -- simple run&debug for single file c++
 vim.keymap.set("n", "<leader><F5>", function()
   local fileName = vim.fn.expand("%:p")
