@@ -8,8 +8,9 @@ vim.keymap.set({ "n", "x"}, "<leader>p", [["+p]])
 
 -- Browse old files, buffert
 vim.keymap.set( 'n', '<leader>bo',function() vim.cmd('browse oldfiles') end, opt) 
-vim.keymap.set( 'n', '<leader><S-TAB>', ':bn<CR>')
-vim.keymap.set( 'n', '<leader><TAB>', ':bp<CR>')
+vim.keymap.del('n', '<C-l>')
+vim.keymap.set( 'n', '<C-l>', ':bn<CR>')
+vim.keymap.set( 'n', '<C-h>', ':bp<CR>')
 vim.keymap.set( 'n', '<leader>bd', ':bd<CR>')
 vim.keymap.set( 'n', '<leader>b', ':ls<CR>:b<space>')
 
@@ -41,3 +42,8 @@ vim.keymap.set("n", "<leader>do", function()
     vim.cmd(":DiffOrig")
 end,opt)
 
+--tabs
+vim.keymap.set( 'n', '<leader>tn', ':tabnew<CR>')
+vim.keymap.set( 'n', '<leader>tc', ':tabc<CR>')
+vim.keymap.set( 'n', '<leader>tl', ':tabn<CR>')
+vim.keymap.set( 'n', '<leader>th', ':tabp<CR>')

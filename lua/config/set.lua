@@ -29,3 +29,6 @@ vim.g.netrw_keepdir=0
 -- case insensitivity/smart for search
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
+
+-- buffers
+vim.opt.hidden= true;
