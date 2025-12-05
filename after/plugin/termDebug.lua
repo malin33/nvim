@@ -1,6 +1,8 @@
 vim.cmd(":packadd termdebug")
+
 vim.keymap.set( 'n', '<F5>', ':Continue<CR>')
 vim.keymap.set( 'n', '<F9>', ':Break<CR>')
+vim.keymap.set( 'n', '<leader><F9>', ':Clear<CR>')
 vim.keymap.set( 'n', '<F10>', ':Over<CR>')
 vim.keymap.set( 'n', '<F11>', ':Step<CR>')
 
@@ -17,9 +19,11 @@ vim.keymap.set("n", "<leader><F5>", function()
   vim.cmd(string.format(":wincmd L"))
 end,opt)
 
+-- close debug session
 vim.keymap.set("n", "<leader><F6>", function()
   vim.cmd(string.format(":Gdb"))
   vim.cmd(":call TermDebugSendCommand('quit')")
   vim.cmd(":call TermDebugSendCommand('y')")
   vim.cmd(":call TermDebugSendCommand('<CR>')")
+  vim.cmd(":q")
 end,opt)
