@@ -1,6 +1,20 @@
 vim.cmd(":packadd termdebug")
 
-vim.keymap.set( 'n', '<F5>', ':Continue<CR>')
+vim.keymap.set( 'n', '<F5>', function()
+  --call feedkeys("\<C-Y>")
+  vim.cmd(string.format(":Continue"))
+  vim.cmd(string.format(":Program"))
+  vim.cmd(":call feedkeys('G')")
+  vim.cmd(string.format(":Source"))
+end,opt)
+
+vim.keymap.set( 'n', '<F10>', function()
+  vim.cmd(string.format(":Over"))
+  vim.cmd(string.format(":Program"))
+  vim.cmd(":call feedkeys('G')")
+  vim.cmd(string.format(":Source"))
+end,opt)
+
 vim.keymap.set( 'n', '<F9>', ':Break<CR>')
 vim.keymap.set( 'n', '<leader><F9>', ':Clear<CR>')
 vim.keymap.set( 'n', '<F10>', ':Over<CR>')
