@@ -22,7 +22,7 @@ vim.opt.updatetime = 50
 vim.o.guicursor = 'n-v-c-sm-i-ci-ve:block,r-cr-o:hor20,i:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor'
 
 -- timeout leaderkey
-vim.opt.timeoutlen=400
+vim.opt.timeoutlen=800
 
 vim.g.netrw_keepdir=0
 

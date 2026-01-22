@@ -19,6 +19,7 @@ vim.keymap.set( 'n', '<F9>', ':Break<CR>')
 vim.keymap.set( 'n', '<leader><F9>', ':Clear<CR>')
 vim.keymap.set( 'n', '<F10>', ':Over<CR>')
 vim.keymap.set( 'n', '<F11>', ':Step<CR>')
+vim.keymap.set( 'n', 'KK', ':Evaluate<CR>')
 
 -- simple run&debug for single file c++
 vim.keymap.set("n", "<leader><F5>", function()
