@@ -1,6 +1,5 @@
 return {
   cmd = { 'clangd',
-    --'/usr/bin/clangd',
     '-j=10',
     '--background-index',
     '--all-scopes-completion',
@@ -11,7 +10,7 @@ return {
     '--enable-config',
     -- '--query-driver=/PATH/TO/Gcc/BIN/*'
     },
-  filetypes = { 'c', 'cpp', 'objc', 'objcpp', 'cuda' },
+  filetypes = { 'c', 'cpp', 'lua' },
   root_markers = {
     '.clangd',
     '.clang-tidy',
