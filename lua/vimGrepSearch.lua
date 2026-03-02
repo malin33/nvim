@@ -27,6 +27,7 @@ function M.searchWindow()
         row = math.floor((ui.height - height) / 2),
         anchor = 'NW',
         style = 'minimal',
+        border = 'rounded'
     }
     local win = vim.api.nvim_open_win(buf, true, opts)
     
@@ -35,19 +36,24 @@ function M.searchWindow()
 
     -- pipe cmd output to scratch buffer
     --local user_input = vim.fn.input("vimgrep string *{cc,cpp,h}: ")
-    local user_input=vim.ui.input({prompt="vimGrep string *{cc,cpp,g}: "}, function(user_input)
-
-      local cmd=vim.api.nvim_exec(string.format(":vim! /%s/jg %s**/*{cc,cpp,h}", user_input, vim.env.repoPath),{output=true})
-      local output = {}
-      for line in cmd:gmatch("[^\n]+") do
-       table.insert(output, line)
-      end
-      vim.api.nvim_buf_set_lines(buf, 5, -1, false, output)
-    end)
 
     -- Change highlighting
     -- use :highlight to see options
     vim.api.nvim_set_option_value('winhl', 'Normal:Label', { win = win })
+
+    vim.keymap.set({ 'n', 'i', 'v' }, '<cr>', function()
+      local lines = vim.api.nvim_buf_get_lines(win.buffer, 0, 1, false)
+      if on_confirm then
+        confirmed = true
+        on_confirm(lines[1])
+        return
+      end
+  end
+  )
+
   end
 
 return M 
+
+--:put =map(getqflist(), 'v:val')
+--local cmd=vim.api.nvim_exec(string.format(":vim! /%s/jg %s**/*{cc,cpp,h}", user_input, vim.env.repoPath),{output=true})

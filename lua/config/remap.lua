@@ -21,6 +21,13 @@ vim.keymap.set("n", "<leader>fs", function()
     vim.cmd(":copen")
 end,opt)
 
+-- String search for c++ files using ripgrep
+vim.keymap.set("n", "<leader>rg", function()
+    local user_input = vim.fn.input("grep string *{cc,cpp,h}: ")
+    vim.cmd(string.format("silent :grep! '%s' '%s' -g '*.{cc,cpp,h}' -s", user_input, vim.env.repoPath))
+    vim.cmd(":copen")
+end,opt)
+
 -- Search file in Path
 vim.keymap.set("n", "<leader>ff", function()
     return ":find **/*"

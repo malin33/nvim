@@ -32,3 +32,7 @@ vim.opt.smartcase = true
 
 -- buffers
 vim.opt.hidden= true;
+
+-- ripgrep
+vim.opt.grepprg="rg --vimgrep"
+vim.opt.grepformat = "%f:%l:%c:%m"
