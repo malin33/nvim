@@ -89,13 +89,18 @@ local function set_keymaps()
 end
 
 local function fill_info()
+  local someInfo={
+    "/path/dd",
+    "*.cc",
+    "ripgrep",
+  }
   local infoStruct={
     "Search Path: ",
     "Include endings: ",
     "Search Engine: ",
   }
   for idx,_ in ipairs(infoStruct) do
-    vim.api.nvim_buf_set_lines(uiStruct.info.buf, idx, -1, false, {infoStruct[idx]})
+    vim.api.nvim_buf_set_lines(uiStruct.info.buf, idx, -1, false, {infoStruct[idx] .. someInfo[idx]})
   end
 end
 
@@ -103,7 +108,8 @@ function M.main()
   create_ui_window()
   set_keymaps()
   fill_info()
-
 end
+
 M.main()
+
 return M 
