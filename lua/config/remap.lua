@@ -18,19 +18,19 @@ vim.keymap.set( 'n', '<C-h>', ':bp<CR>')
 vim.keymap.set( 'n', '<leader>bd', ':bd<CR>')
 vim.keymap.set( 'n', '<leader>b', ':ls<CR>:b<space>')
 
--- String search for c++ files using vimgrep
-vim.keymap.set("n", "<leader>fs", function()
-    local user_input = vim.fn.input("vimgrep string *{cc,cpp,h}: ")
-    vim.cmd(string.format(":vim! /%s/jg %s**/*{cc,cpp,h}", user_input, vim.env.repoPath))
-    vim.cmd(":copen")
-end,opt)
-
--- String search for c++ files using ripgrep
-vim.keymap.set("n", "<leader>rg", function()
-    local user_input = vim.fn.input("grep string *{cc,cpp,h}: ")
-    vim.cmd(string.format("silent :grep! '%s' '%s' -g '*.{cc,cpp,h}' -s", user_input, vim.env.repoPath))
-    vim.cmd(":copen")
-end,opt)
+-- -- String search for c++ files using vimgrep
+-- vim.keymap.set("n", "<leader>fs", function()
+--     local user_input = vim.fn.input("vimgrep string *{cc,cpp,h}: ")
+--     vim.cmd(string.format(":vim! /%s/jg %s**/*{cc,cpp,h}", user_input, vim.env.repoPath))
+--     vim.cmd(":copen")
+-- end,opt)
+--
+-- -- String search for c++ files using ripgrep
+-- vim.keymap.set("n", "<leader>rg", function()
+--     local user_input = vim.fn.input("grep string *{cc,cpp,h}: ")
+--     vim.cmd(string.format("silent :grep! '%s' '%s' -g '*.{cc,cpp,h}' -s", user_input, vim.env.repoPath))
+--     vim.cmd(":copen")
+-- end,opt)
 
 -- Search file in Path
 vim.keymap.set("n", "<leader>ff", function()
