@@ -1,3 +1,7 @@
+-- debug reload init 
+vim.keymap.set("n", "<space><space>x", "<cmd>source %<CR>")
+-- vim.keymap.set({"n"}, "<leader>", ":source $MYVIMRC <CR>") 
+
 -- set leaderkey
 vim.g.mapleader = " "
 vim.keymap.set("n","<leader>pv", vim.cmd.Ex)

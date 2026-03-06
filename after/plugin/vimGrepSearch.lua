@@ -11,4 +11,4 @@ vim.api.nvim_create_user_command(
   vimGrepSearch.setup,
   {})
 
-vim.keymap.set( 'n', '<leader>S',function() vimGrepSearch.searchWindow() end, {silent = true, nowait = true, noremap = true}) 
+vim.keymap.set( 'n', '<leader>SS',function() vimGrepSearch.searchWindow() end, {silent = true, nowait = true, noremap = true}) 
