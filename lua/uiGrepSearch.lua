@@ -1,68 +1,116 @@
 local M={}
 
-function M.setSearchPath()
-  vim.g.loaded_uiGrepSearchPath=(vim.fn.getcwd())
-  print(vim.g.loaded_uiGrepSearchPath)
-end
+local UI_WIDTH=60
+local UI_HEIGHT=2
+local UI=vim.api.nvim_list_uis()[1]
 
 local uiStruct={
   header={
+    buf={},
+    win={},
+    cs={
+      size={},
+      pos={},
+      conf={},
+    },
+    txt={},
   },
   info={
+    buf={},
+    win={},
+    cs={
+      size={},
+      pos={},
+      conf={},
+    },
+    txt={
+      "Search path:",
+      "File extensions:"
+    },
   },
   cmd={
+    buf={},
+    win={},
+    cs={
+      size={},
+      pos={},
+      conf={}
+    },
   },
 }
 
-local function create_ui_window()
-  local infoWidth = 50
-  local infoHeight = 5
- 
-  local ui=vim.api.nvim_list_uis()[1]
-  local posCol=math.floor((ui.width - infoWidth) / 2)
-  local posRow=math.floor((ui.height - infoHeight) / 2)
-
-  local headerConf={
+local function ui_config()
+  
+  -- header
+  uiStruct.header.cs.size={
+    height=UI_HEIGHT,
+    width=UI_WIDTH,
+  }
+  uiStruct.header.cs.pos={
+    x=math.floor((UI.width - uiStruct.header.cs.size.width) / 2),
+    y=math.floor((UI.height - uiStruct.header.cs.size.height) / 2),
+  }
+  uiStruct.header.cs.conf={
     relative = "editor",
-    width = infoWidth,
+    width = uiStruct.header.cs.size.width,
     height = 1,
     anchor = 'NW',
     style = "minimal",
-    col = posCol,
-    row = posRow-5,
+    col = uiStruct.header.cs.pos.x,
+    row = uiStruct.header.cs.pos.y-5,
     zindex = 2,
     border = 'none',
   }
-  local infoConf={
+  
+  -- info
+  uiStruct.info.cs.size={
+    height=UI_HEIGHT,
+    width=UI_WIDTH,
+  }
+  uiStruct.info.cs.pos={
+    x=math.floor((UI.width - uiStruct.info.cs.size.width) / 2),
+    y=math.floor((UI.height - uiStruct.info.cs.size.height) / 2),
+  }
+  uiStruct.info.cs.conf={
     relative = "editor",
-    width = infoWidth,
-    height = infoHeight,
+    width = uiStruct.info.cs.size.width,
+    height = uiStruct.info.cs.size.height,
     anchor = 'NW',
     style = "minimal",
-    col = posCol,
-    row = posRow,
-    zindex = 1,
+    col = uiStruct.info.cs.pos.x,
+    row = uiStruct.info.cs.pos.y,
+    zindex = 2,
     border = 'rounded',
   }
-  local cmdConf={
+
+  -- cmd
+  uiStruct.cmd.cs.size={
+    height=UI_HEIGHT,
+    width=UI_WIDTH,
+  }
+  uiStruct.cmd.cs.pos={
+    x=math.floor((UI.width - uiStruct.cmd.cs.size.width) / 2),
+    y=math.floor((UI.height - uiStruct.cmd.cs.size.height) / 2),
+  }
+  uiStruct.cmd.cs.conf={
     relative = "editor",
-    width = infoWidth,
-  height = 1,
+    width = uiStruct.cmd.cs.size.width,
+    height = 1,
     anchor = 'NW',
     style = "minimal",
-    col = posCol,
-    row = posRow+infoHeight+2,
+    col = uiStruct.cmd.cs.pos.x,
+    row = uiStruct.cmd.cs.pos.y+uiStruct.info.cs.size.height+2,
     border = 'rounded',
-  } 
+  }
+end
 
+local function create_ui_window()
   uiStruct.header.buf=vim.api.nvim_create_buf(false,true)
-  uiStruct.header.win=vim.api.nvim_open_win(uiStruct.header.buf,false,headerConf)
-  
+  uiStruct.header.win=vim.api.nvim_open_win(uiStruct.header.buf,false,uiStruct.header.cs.conf)
   uiStruct.info.buf=vim.api.nvim_create_buf(false,true)
-  uiStruct.info.win=vim.api.nvim_open_win(uiStruct.info.buf,true,infoConf)
-
+  uiStruct.info.win=vim.api.nvim_open_win(uiStruct.info.buf,true,uiStruct.info.cs.conf)
   uiStruct.cmd.buf=vim.api.nvim_create_buf(false,true)
-  uiStruct.cmd.win=vim.api.nvim_open_win(uiStruct.cmd.buf,true,cmdConf)
+  uiStruct.cmd.win=vim.api.nvim_open_win(uiStruct.cmd.buf,true,uiStruct.cmd.cs.conf)
 
   vim.api.nvim_set_option_value('winhl', 'Normal:Label', { win = uiStruct.header.win })
   vim.api.nvim_set_option_value('winhl', 'Normal:Label', { win = uiStruct.info.win })
@@ -72,16 +120,10 @@ end
 local function fill_info()
   local someInfo={
     string.format("%s",vim.g.loaded_uiGrepSearchPath),
-    string.format("%s",vim.g.loaded_uiGrepSearchEndings),
-    "NOT IMPLEMENTED",
-}
-  local infoStruct={
-    "Search Path: ",
-    "Include endings:",
-    "Search Engine: ",
+    string.format("%s",((vim.g.loaded_uiGrepSearchEndings=="") and "*.{}" or vim.g.loaded_uiGrepSearchEndings)),
   }
-  for idx,_ in ipairs(infoStruct) do
-    vim.api.nvim_buf_set_lines(uiStruct.info.buf, idx, -1, false, {infoStruct[idx] .. someInfo[idx]})
+  for idx,_ in ipairs(uiStruct.info.txt) do
+    vim.api.nvim_buf_set_lines(uiStruct.info.buf, idx-1, -1, false, {uiStruct.info.txt[idx] .. someInfo[idx]})
   end
 end
 
@@ -94,19 +136,20 @@ end
 local function user_prompt()
   local user_input=table.concat(vim.api.nvim_buf_get_lines(uiStruct.cmd.buf,0,-1,false))
   vim.cmd(":stopinsert")
-  vim.cmd(string.format("silent :grep! '%s' '%s' -g '%s' -s", user_input, vim.g.loaded_uiGrepSearchPath, vim.g.loaded_uiGrepSearchEndings))
+  vim.cmd(string.format("silent :grep! '%s' '%s' -g '%s' -S", user_input, vim.g.loaded_uiGrepSearchPath, vim.g.loaded_uiGrepSearchEndings))
   vim.cmd(":copen")
   close_windows()
 end
 
 local function set_searchEndings()
   vim.api.nvim_set_current_win(uiStruct.info.win)
-  vim.api.nvim_win_set_cursor(uiStruct.info.win,{3,16})
+  local sIdx,eIdx=string.find(table.concat(vim.api.nvim_buf_get_lines(uiStruct.info.buf,1,-1,false)),':')
+  vim.api.nvim_win_set_cursor(uiStruct.info.win,{2,eIdx+3})
 end
 
 local function get_searchEndings()
-  local user_input=table.concat(vim.api.nvim_buf_get_text(uiStruct.info.buf,2,16,2,-1,{}))
-  print(user_input)
+  local sIdx,eIdx=string.find(table.concat(vim.api.nvim_buf_get_lines(uiStruct.info.buf,1,-1,false)),':')
+  local user_input=table.concat(vim.api.nvim_buf_get_text(uiStruct.info.buf,1,eIdx+1,1,-1,{}))
   vim.g.loaded_uiGrepSearchEndings=string.format("%s",user_input)
 end
 
@@ -132,13 +175,19 @@ local function set_keymaps()
 
 end
 
+function M.setSearchPath()
+  vim.g.loaded_uiGrepSearchPath=(vim.fn.getcwd())
+  print(vim.g.loaded_uiGrepSearchPath)
+end
+
 function M.main()
+  ui_config()
   create_ui_window()
   set_keymaps()
   fill_info()
   vim.cmd(":startinsert")
 end
 
---M.main()
+-- M.main()
 
 return M 

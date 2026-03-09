@@ -1,10 +1,10 @@
-if vim.g.loaded_uiPrompt == 1 then
-  return
-end
-vim.g.loaded_uiPrompt = 1
-
-vim.keymap.set( 'n', '<leader>S',function() uiPrompt.main() end, {silent = true, nowait = true, noremap = true}) 
-
+-- if vim.g.loaded_uiPrompt == 1 then
+--   return
+-- end
+-- vim.g.loaded_uiPrompt = 1
+--
+-- vim.keymap.set( 'n', '<leader>S',function() uiPrompt.main() end, {silent = true, nowait = true, noremap = true}) 
+--
 -- local uiPrompt=require("uiPrompt")
 --
 -- -- user commands here

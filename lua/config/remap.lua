@@ -1,6 +1,5 @@
 -- debug reload init 
 vim.keymap.set("n", "<space><space>x", "<cmd>source %<CR>")
--- vim.keymap.set({"n"}, "<leader>", ":source $MYVIMRC <CR>") 
 
 -- set leaderkey
 vim.g.mapleader = " "
@@ -25,12 +24,6 @@ vim.keymap.set( 'n', '<leader>b', ':ls<CR>:b<space>')
 --     vim.cmd(":copen")
 -- end,opt)
 --
--- -- String search for c++ files using ripgrep
--- vim.keymap.set("n", "<leader>rg", function()
---     local user_input = vim.fn.input("grep string *{cc,cpp,h}: ")
---     vim.cmd(string.format("silent :grep! '%s' '%s' -g '*.{cc,cpp,h}' -s", user_input, vim.env.repoPath))
---     vim.cmd(":copen")
--- end,opt)
 
 -- Search file in Path
 vim.keymap.set("n", "<leader>ff", function()
