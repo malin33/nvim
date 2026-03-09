@@ -3,6 +3,8 @@ local M={}
 local UI_WIDTH=60
 local UI_HEIGHT=2
 local UI=vim.api.nvim_list_uis()[1]
+local TXT_PATH="Search path:"
+local TXT_EXT="File extensions:"
 
 local uiStruct={
   header={
@@ -24,8 +26,8 @@ local uiStruct={
       conf={},
     },
     txt={
-      "Search path:",
-      "File extensions:"
+      TXT_PATH,
+      TXT_EXT,
     },
   },
   cmd={
@@ -40,7 +42,6 @@ local uiStruct={
 }
 
 local function ui_config()
-  
   -- header
   uiStruct.header.cs.size={
     height=UI_HEIGHT,
@@ -117,13 +118,22 @@ local function create_ui_window()
   vim.api.nvim_set_option_value('winhl', 'Normal:Label', { win = uiStruct.cmd.win })
 end
 
+local function indexOf(array, value)
+    for i, v in ipairs(array) do
+        if v == value then
+            return i
+        end
+    end
+    return nil
+end
+
 local function fill_info()
   local someInfo={
     string.format("%s",vim.g.loaded_uiGrepSearchPath),
     string.format("%s",((vim.g.loaded_uiGrepSearchEndings=="") and "*.{}" or vim.g.loaded_uiGrepSearchEndings)),
   }
   for idx,_ in ipairs(uiStruct.info.txt) do
-    vim.api.nvim_buf_set_lines(uiStruct.info.buf, idx-1, -1, false, {uiStruct.info.txt[idx] .. someInfo[idx]})
+    vim.api.nvim_buf_set_lines(uiStruct.info.buf, idx-1, -1, false, {uiStruct.info.txt[idx]..someInfo[idx]})
   end
 end
 
@@ -143,18 +153,22 @@ end
 
 local function set_searchEndings()
   vim.api.nvim_set_current_win(uiStruct.info.win)
-  local sIdx,eIdx=string.find(table.concat(vim.api.nvim_buf_get_lines(uiStruct.info.buf,1,-1,false)),':')
-  vim.api.nvim_win_set_cursor(uiStruct.info.win,{2,eIdx+3})
+  local lineIdx=indexOf(uiStruct.info.txt,TXT_EXT)-1
+  local sIdx,eIdx=string.find(table.concat(vim.api.nvim_buf_get_lines(uiStruct.info.buf,lineIdx,-1,false)),':')
+  vim.api.nvim_win_set_cursor(uiStruct.info.win,{lineIdx+1,eIdx+3})
 end
 
 local function get_searchEndings()
-  local sIdx,eIdx=string.find(table.concat(vim.api.nvim_buf_get_lines(uiStruct.info.buf,1,-1,false)),':')
-  local user_input=table.concat(vim.api.nvim_buf_get_text(uiStruct.info.buf,1,eIdx+1,1,-1,{}))
+  local lineIdx=indexOf(uiStruct.info.txt,TXT_EXT)-1
+  local sIdx,eIdx=string.find(table.concat(vim.api.nvim_buf_get_lines(uiStruct.info.buf,lineIdx,-1,false)),':')
+  local user_input=table.concat(vim.api.nvim_buf_get_text(uiStruct.info.buf,lineIdx,eIdx,lineIdx,-1,{}))
   vim.g.loaded_uiGrepSearchEndings=string.format("%s",user_input)
+  if vim.g.loaded_uiGrepSearchEndings=="*.{}" then
+    vim.g.loaded_uiGrepSearchEndings=""
+  end
 end
 
 local function set_keymaps()
-
   vim.keymap.set('n', '<leader>',function() 
     close_windows()
   end, {buffer=uiStruct.cmd.buf,silent = true, nowait = true, noremap = true } )
@@ -172,7 +186,6 @@ local function set_keymaps()
     vim.api.nvim_set_current_win(uiStruct.cmd.win)
     fill_info()
   end, {buffer=uiStruct.info.buf,silent = true, nowait = true, noremap = false} )
-
 end
 
 function M.setSearchPath()
@@ -188,6 +201,6 @@ function M.main()
   vim.cmd(":startinsert")
 end
 
--- M.main()
+M.main()
 
 return M 
