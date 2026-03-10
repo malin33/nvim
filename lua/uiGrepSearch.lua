@@ -1,10 +1,11 @@
 local M={}
 
-local UI_WIDTH=60
-local UI_HEIGHT=2
+local UI_WIDTH=70
+local UI_HEIGHT=3
 local UI=vim.api.nvim_list_uis()[1]
 local TXT_PATH="Search path:"
 local TXT_EXT="File extensions:"
+local TXT_QH="keys: <n><leader> - quit, <n>e - edit extensions, <n,i><CR> - apply"
 
 local uiStruct={
   header={
@@ -28,6 +29,7 @@ local uiStruct={
     txt={
       TXT_PATH,
       TXT_EXT,
+      TXT_QH,
     },
   },
   cmd={
@@ -131,10 +133,20 @@ local function fill_info()
   local someInfo={
     string.format("%s",vim.g.loaded_uiGrepSearchPath),
     string.format("%s",((vim.g.loaded_uiGrepSearchEndings=="") and "*.{}" or vim.g.loaded_uiGrepSearchEndings)),
+    "",
   }
   for idx,_ in ipairs(uiStruct.info.txt) do
     vim.api.nvim_buf_set_lines(uiStruct.info.buf, idx-1, -1, false, {uiStruct.info.txt[idx]..someInfo[idx]})
   end
+
+  local lineIdx=indexOf(uiStruct.info.txt,TXT_EXT)-1
+  local sIdx,eIdx=string.find(table.concat(vim.api.nvim_buf_get_lines(uiStruct.info.buf,lineIdx,-1,false)),':')
+  vim.hl.range(uiStruct.info.buf,vim.api.nvim_create_namespace("test"), "SpellLocal", {lineIdx,0},{lineIdx,sIdx})
+  lineIdx=indexOf(uiStruct.info.txt,TXT_PATH)-1
+  sIdx,eIdx=string.find(table.concat(vim.api.nvim_buf_get_lines(uiStruct.info.buf,lineIdx,-1,false)),':')
+  vim.hl.range(uiStruct.info.buf,vim.api.nvim_create_namespace("test"), "SpellLocal", {lineIdx,0},{lineIdx,sIdx})
+  lineIdx=indexOf(uiStruct.info.txt,TXT_QH)-1
+  vim.hl.range(uiStruct.info.buf,vim.api.nvim_create_namespace("test"), "LineNr", {lineIdx,0},{lineIdx,-1})
 end
 
 local function close_windows()
@@ -201,6 +213,6 @@ function M.main()
   vim.cmd(":startinsert")
 end
 
-M.main()
+-- M.main()
 
 return M 
