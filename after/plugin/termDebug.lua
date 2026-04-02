@@ -22,12 +22,23 @@ vim.keymap.set( 'n', '<F11>', ':Step<CR>')
 vim.keymap.set( 'n', 'KK', ':Evaluate<CR>')
 
 -- simple run&debug for single file c++
+-- vim.keymap.set("n", "<leader><F5>", function()
+--   local currentFileName = vim.fn.expand("%:p")
+--   local compiledFileName = vim.fn.expand("%:r")
+--   vim.cmd(string.format(":!g++ %s -o %s -g", currentFileName, compiledFileName))
+--
+--   vim.cmd(string.format(":Termdebug %s",compiledFileName))
+--   vim.cmd(":call TermDebugSendCommand('start')")
+--   vim.cmd(string.format(":Var"))
+--   vim.cmd(string.format(":Source"))
+--   vim.cmd(string.format(":wincmd L"))
+-- end,opt)
+
+-- run&debug from set path
 vim.keymap.set("n", "<leader><F5>", function()
-  local currentFileName = vim.fn.expand("%:p")
-  local compiledFileName = vim.fn.expand("%:r")
-  vim.cmd(string.format(":!g++ %s -o %s -g", currentFileName, compiledFileName))
   
-  vim.cmd(string.format(":Termdebug %s",compiledFileName))
+  local userInput=vim.fn.input("compiled file: ")
+  vim.cmd(string.format(":Termdebug %s",userInput))
   vim.cmd(":call TermDebugSendCommand('start')")
   vim.cmd(string.format(":Var"))
   vim.cmd(string.format(":Source"))
